@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1 class="title">Todo List</h1>
+
+      <form class="todo-form">
+        <input
+          type="text"
+          class="todo-input"
+          placeholder="Add a new todo..."
+          required
+        />
+        <button class="add-btn" type="button">Add</button>
+      </form>
+
+      <div class="todo-controls">
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all" type="button">
+            All
+          </button>
+          <button class="filter-btn" data-filter="active" type="button">
+            Active
+          </button>
+          <button class="filter-btn" data-filter="completed" type="button">
+            Completed
+          </button>
+        </div>
+
+        <button class="clear-completed">Clear Todo</button>
+      </div>
+      <ul class="todo-list"></ul>
+    </main>
+
+    <script src="/index.js"></script>
+  </body>
+</html>
