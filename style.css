@@ -132,3 +132,11 @@ body {
   color: #f44336;
   cursor: pointer;
 }
+
+
+
+.todo-message{
+  color: red;
+  padding: 10px 0;
+
+}

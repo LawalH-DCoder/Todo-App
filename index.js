@@ -8,6 +8,7 @@ const completedFilterBtn = document.querySelector('[data-filter="completed"]');
 const completedBtn = document.querySelector(".complete-btn");
 const deleteBtn = document.querySelector(".delete-btn");
 const tabs = document.querySelectorAll(".filter-btn");
+const message = document.querySelector(".todo-message")
 
 let filterBy = "all";
 
@@ -56,7 +57,12 @@ const HandleAddButtonClick = () => {
 
   const alreadyExist = todoList.some((todo) => todo.title === inputValue);
 
-  if (alreadyExist) return;
+    if (alreadyExist) {
+    message.textContent = "Todo already exists";
+    return;
+  }
+
+  message.textContent = "";
 
   todoList.push({
     title: inputValue,
