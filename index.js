@@ -17,13 +17,13 @@ const storedItem = localStorage.getItem("stored-todo");
 
 let todoList = storedItem ? JSON.parse(storedItem) : [];
 
-const CapitalizeWord = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+const capitalizeWord = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-const StoreTodoInLocalStorage = (todoToStore) => {
+const storeTodoInLocalStorage = (todoToStore) => {
   localStorage.setItem("stored-todo", JSON.stringify(todoToStore));
 };
 
-const FilteredList = () => {
+const filteredList = () => {
   switch (filterBy) {
     case "active":
       return todoList.filter((list) => list.status === "active");
@@ -34,16 +34,16 @@ const FilteredList = () => {
   }
 };
 
-const RenderTodoListView = () => {
+const renderTodoListView = () => {
   todoListContainer.innerHTML = `
-  ${FilteredList()
+  ${filteredList()
     ?.map((todo) => {
       const isComplete = todo.status === "completed";
       return `<li class="todo-item">
-        <span class="todo-text">${CapitalizeWord(todo.title)}</span>
+        <span class="todo-text">${capitalizeWord(todo.title)}</span>
         <div class="todo-actions">
-          <button class="complete-btn" onclick="UpdateTodoStatus('${todo.title}')">${isComplete ? "Mark as active again" : "Mark as completed"}</button>
-          <button class="delete-btn" onclick="DeleteItem('${todo.title}')">x</button>
+          <button class="complete-btn" onclick="updateTodoStatus('${todo.title}')">${isComplete ? "Mark as active again" : "Mark as completed"}</button>
+          <button class="delete-btn" onclick="deleteItem('${todo.title}')">x</button>
         </div>
       </li>`;
     })
@@ -51,7 +51,7 @@ const RenderTodoListView = () => {
   `;
 };
 
-const HandleAddButtonClick = () => {
+const handleAddButtonClick = () => {
   const inputValue = inputField.value?.toLowerCase()?.trim();
 
   if (!inputValue) return;
@@ -71,8 +71,8 @@ const HandleAddButtonClick = () => {
   });
 
   inputField.value = "";
-  RenderTodoListView();
-  StoreTodoInLocalStorage(todoList);
+  renderTodoListView();
+  storeTodoInLocalStorage(todoList);
 };
 
 tabs.forEach((tab) => {
@@ -82,7 +82,7 @@ tabs.forEach((tab) => {
   });
 });
 
-const UpdateTodoStatus = (title) => {
+const updateTodoStatus = (title) => {
   todoList = todoList.map((todo) => {
     const alreadyComplete = todo.status === "completed";
     const isActiveTodo = todo.title === title;
@@ -96,45 +96,45 @@ const UpdateTodoStatus = (title) => {
     return todo;
   });
 
-  RenderTodoListView();
-  StoreTodoInLocalStorage(todoList);
+  renderTodoListView();
+  storeTodoInLocalStorage(todoList);
 };
 
-const DeleteItem = (title) => {
+const deleteItem = (title) => {
   todoList = todoList.filter((todo) => todo.title !== title);
-  RenderTodoListView();
-  StoreTodoInLocalStorage(todoList);
+  renderTodoListView();
+  storeTodoInLocalStorage(todoList);
 };
 
-const ClearTodo = () => {
+const clearTodo = () => {
   filterBy = "all";
   todoList = [];
   localStorage.removeItem("stored-todo");
-  RenderTodoListView();
+  renderTodoListView();
 };
 
 formField.addEventListener("submit", (e) => {
   e.preventDefault();
-  HandleAddButtonClick();
+  handleAddButtonClick();
 });
 
-addButton.addEventListener("click", HandleAddButtonClick);
+addButton.addEventListener("click", handleAddButtonClick);
 
 allFilterBtn.addEventListener("click", () => {
   filterBy = "all";
-  RenderTodoListView();
+  renderTodoListView();
 });
 
 activeFilterBtn.addEventListener("click", () => {
   filterBy = "active";
-  RenderTodoListView();
+  renderTodoListView();
 });
 
 completedFilterBtn.addEventListener("click", () => {
   filterBy = "completed";
-  RenderTodoListView();
+  renderTodoListView();
 });
 
-clearButton.addEventListener("click", () => ClearTodo());
+clearButton.addEventListener("click", () => clearTodo());
 
-RenderTodoListView();
+renderTodoListView();
