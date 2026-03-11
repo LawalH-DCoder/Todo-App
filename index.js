@@ -1,3 +1,4 @@
+const formField = document.querySelector(".todo-form");
 const inputField = document.querySelector(".todo-input");
 const addButton = document.querySelector(".add-btn");
 const clearButton = document.querySelector(".clear-completed");
@@ -8,7 +9,7 @@ const completedFilterBtn = document.querySelector('[data-filter="completed"]');
 const completedBtn = document.querySelector(".complete-btn");
 const deleteBtn = document.querySelector(".delete-btn");
 const tabs = document.querySelectorAll(".filter-btn");
-const message = document.querySelector(".todo-message")
+const message = document.querySelector(".todo-message");
 
 let filterBy = "all";
 
@@ -57,7 +58,7 @@ const HandleAddButtonClick = () => {
 
   const alreadyExist = todoList.some((todo) => todo.title === inputValue);
 
-    if (alreadyExist) {
+  if (alreadyExist) {
     message.textContent = "Todo already exists";
     return;
   }
@@ -111,6 +112,11 @@ const ClearTodo = () => {
   localStorage.removeItem("stored-todo");
   RenderTodoListView();
 };
+
+formField.addEventListener("submit", (e) => {
+  e.preventDefault();
+  HandleAddButtonClick();
+});
 
 addButton.addEventListener("click", HandleAddButtonClick);
 
