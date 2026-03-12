@@ -1,6 +1,7 @@
 const formField = document.querySelector(".todo-form");
 const inputField = document.querySelector(".todo-input");
 const addButton = document.querySelector(".add-btn");
+const progressBar = document.querySelector(".progress-fill");
 const clearButton = document.querySelector(".clear-completed");
 const todoListContainer = document.querySelector(".todo-list");
 const allFilterBtn = document.querySelector('[data-filter="all"]');
@@ -9,7 +10,7 @@ const completedFilterBtn = document.querySelector('[data-filter="completed"]');
 const completedBtn = document.querySelector(".complete-btn");
 const deleteBtn = document.querySelector(".delete-btn");
 const tabs = document.querySelectorAll(".filter-btn");
-const message = document.querySelector(".todo-message");
+const message = document.querySelector(".toast-message");
 
 let filterBy = "all";
 
@@ -19,33 +20,59 @@ let todoList = storedItem ? JSON.parse(storedItem) : [];
 
 const capitalizeWord = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
+const getProgressBarPercentage = (completedTasks) => {
+  if (todoList.length === 0) return 0;
+  return (completedTasks.length / todoList.length) * 100;
+};
+
 const storeTodoInLocalStorage = (todoToStore) => {
   localStorage.setItem("stored-todo", JSON.stringify(todoToStore));
 };
 
 const filteredList = () => {
+  const completedTask = todoList.filter((list) => list.status === "completed");
+  const activeTask = todoList.filter((list) => list.status === "active");
+
   switch (filterBy) {
     case "active":
-      return todoList.filter((list) => list.status === "active");
+      return activeTask;
     case "completed":
-      return todoList.filter((list) => list.status === "completed");
+      return completedTask;
     default:
       return todoList;
   }
 };
 
 const renderTodoListView = () => {
+  const completedTask = todoList?.filter((list) => list.status === "completed");
+
+  progressBar.style.width = `${getProgressBarPercentage(completedTask)}%`;
+
   todoListContainer.innerHTML = `
   ${filteredList()
     ?.map((todo) => {
       const isComplete = todo.status === "completed";
-      return `<li class="todo-item">
-        <span class="todo-text">${capitalizeWord(todo.title)}</span>
-        <div class="todo-actions">
-          <button class="complete-btn" onclick="updateTodoStatus('${todo.title}')">${isComplete ? "Mark as active again" : "Mark as completed"}</button>
-          <button class="delete-btn" onclick="deleteItem('${todo.title}')">x</button>
+
+      return `
+      <li class="task-item ${isComplete ? "done" : ""}">
+      
+        <div class="checkbox ${isComplete ? "checked" : ""}"
+        onclick="updateTodoStatus('${todo.id}')">
         </div>
-      </li>`;
+
+        <div class="priority-dot p-mid"></div>
+
+        <span class="task-text">
+        ${capitalizeWord(todo.title)}
+        </span>
+
+        <button class="delete-btn"
+        onclick="deleteItem('${todo.id}')">
+        x
+        </button>
+
+      </li>
+      `;
     })
     .join("")}
   `;
@@ -66,6 +93,7 @@ const handleAddButtonClick = () => {
   message.textContent = "";
 
   todoList.push({
+    id: Date.now().toString(),
     title: inputValue,
     status: "active",
   });
@@ -82,10 +110,10 @@ tabs.forEach((tab) => {
   });
 });
 
-const updateTodoStatus = (title) => {
+const updateTodoStatus = (id) => {
   todoList = todoList.map((todo) => {
     const alreadyComplete = todo.status === "completed";
-    const isActiveTodo = todo.title === title;
+    const isActiveTodo = todo.id === id;
     if (isActiveTodo && alreadyComplete) {
       todo.status = "active";
     } else if (isActiveTodo) {
@@ -100,16 +128,15 @@ const updateTodoStatus = (title) => {
   storeTodoInLocalStorage(todoList);
 };
 
-const deleteItem = (title) => {
-  todoList = todoList.filter((todo) => todo.title !== title);
+const deleteItem = (id) => {
+  todoList = todoList.filter((todo) => todo.id !== id);
   renderTodoListView();
   storeTodoInLocalStorage(todoList);
 };
 
 const clearTodo = () => {
-  filterBy = "all";
   todoList = [];
-  localStorage.removeItem("stored-todo");
+  storeTodoInLocalStorage(todoList);
   renderTodoListView();
 };
 
