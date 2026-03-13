@@ -14,7 +14,6 @@
 
 body {
   font-family: "DM Sans", sans-serif;
-  background: var(--bg-page);
   min-height: 100vh;
 }
 
@@ -127,8 +126,7 @@ body {
   margin-bottom: 1.25rem;
 }
 .filter-btn {
-  font-family: "DM Mono", monospace;
-  font-size: 11px;
+  font-size: 14px;
   letter-spacing: 0.3px;
   background: none;
   border: 0.5px solid var(--border-light);
@@ -148,6 +146,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  padding-left:0;
 }
 .task-item {
   background: var(--bg-primary);
